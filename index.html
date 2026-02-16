@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="900">
     <title>Morpheus Command Center</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -17,12 +18,17 @@
             padding: 2rem;
             border-bottom: 2px solid #e94560;
         }
-        .header h1 {
-            color: #e94560;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+        .header h1 { color: #e94560; font-size: 2.5rem; margin-bottom: 0.5rem; }
         .header p { color: #888; }
+        .last-updated {
+            background: #e94560;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 1rem;
+        }
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -61,9 +67,8 @@
         .status-online { background: #00d26a; box-shadow: 0 0 10px #00d26a; }
         .status-offline { background: #ff4757; }
         .status-warn { background: #ffa502; }
-        .agent-list {
-            list-style: none;
-        }
+        .status-coding { background: #74b9ff; box-shadow: 0 0 10px #74b9ff; }
+        .agent-list { list-style: none; }
         .agent-item {
             display: flex;
             align-items: center;
@@ -82,6 +87,13 @@
             font-size: 0.85rem;
             color: #888;
         }
+        .task-badge {
+            background: #2a2a3e;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #74b9ff;
+        }
         .stat-row {
             display: flex;
             justify-content: space-between;
@@ -93,35 +105,8 @@
             font-weight: bold;
             color: #e94560;
         }
-        .activity-list {
-            list-style: none;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .activity-item {
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            background: #0f0f1a;
-            border-radius: 8px;
-            border-left: 3px solid #e94560;
-        }
-        .activity-time {
-            font-size: 0.75rem;
-            color: #666;
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: #e94560;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: background 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover { background: #ff6b6b; }
+        .stat-value.positive { color: #00d26a; }
+        .stat-value.negative { color: #ff4757; }
         .footer {
             text-align: center;
             padding: 2rem;
@@ -129,23 +114,22 @@
             border-top: 1px solid #2a2a3e;
             margin-top: 2rem;
         }
-        .wallet-address {
-            font-family: monospace;
-            background: #0f0f1a;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-        .tier-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #00d26a20;
+            color: #00d26a;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
+            font-size: 0.85rem;
+            font-weight: 500;
+            animation: pulse 2s infinite;
         }
-        .tier-a { background: #00d26a; color: #000; }
-        .tier-b { background: #ffa502; color: #000; }
-        .tier-c { background: #74b9ff; color: #000; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; }
             .header h1 { font-size: 1.75rem; }
@@ -155,184 +139,163 @@
 <body>
     <div class="header">
         <h1>💊 Morpheus Command Center</h1>
-        <p>Polymarket Trading • Shadow Whale Intelligence • Team Operations</p>
+        <p>Real-Time Trading Operations & Team Status</p>
+        <div class="last-updated">🔄 Last Updated: 2026-02-16 15:50:59</div>
     </div>
 
     <div class="container">
         <div class="grid">
-            <!-- Agent Status -->
+            <!-- Team Status -->
             <div class="card">
-                <h2>🤖 Agent Status</h2>
+                <h2>🤖 Team Status</h2>
                 <ul class="agent-list">
                     <li class="agent-item">
                         <div class="agent-name">
                             <span class="status-indicator status-online"></span>
                             <div>
                                 <div>Morpheus</div>
-                                <div class="agent-role">Main Agent / Coordinator</div>
+                                <div class="agent-role">Coordinator</div>
                             </div>
                         </div>
-                        <span class="tier-badge tier-a">ACTIVE</span>
+                        <span style="color: #00d26a;">🟢 Active</span>
                     </li>
                     <li class="agent-item">
                         <div class="agent-name">
                             <span class="status-indicator status-online"></span>
                             <div>
                                 <div>Tank</div>
-                                <div class="agent-role">Research Specialist</div>
+                                <div class="agent-role">Researcher</div>
                             </div>
                         </div>
-                        <span class="tier-badge tier-a">ACTIVE</span>
+                        <span style="color: #00d26a;">🟢 Standby</span>
+                    </li>
+                    <li class="agent-item">
+                        <div class="agent-name">
+                            <span class="status-indicator status-coding"></span>
+                            <div>
+                                <div>The Oracle</div>
+                                <div class="agent-role">Developer</div>
+                            </div>
+                        </div>
+                        <span class="task-badge">🟡 15-min bot</span>
                     </li>
                     <li class="agent-item">
                         <div class="agent-name">
                             <span class="status-indicator status-online"></span>
                             <div>
-                                <div>Polymarket Bot</div>
-                                <div class="agent-role">Clear-Win Strategy</div>
+                                <div>Dozer</div>
+                                <div class="agent-role">Wellness</div>
                             </div>
                         </div>
-                        <span class="tier-badge tier-a">LIVE</span>
+                        <span style="color: #00d26a;">🟢 Ready</span>
                     </li>
                 </ul>
             </div>
 
-            <!-- Polymarket Status -->
+            <!-- Shadow Whale Monitor -->
+            <div class="card">
+                <h2>🐋 Shadow Whale Monitor</h2>
+                <div class="live-badge">
+                    <span class="status-indicator status-online"></span>
+                    🟡 Checking...
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="stat-row">
+                        <span>Blocks Checked</span>
+                        <span class="stat-value">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Trades Detected</span>
+                        <span class="stat-value">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Wallets Monitored</span>
+                        <span class="stat-value">2</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Last Trade</span>
+                        <span class="stat-value">None</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Polymarket Bot -->
             <div class="card">
                 <h2>📊 Polymarket Bot</h2>
                 <div class="stat-row">
-                    <span>Capital Deployed</span>
+                    <span>Capital</span>
                     <span class="stat-value">$100.00</span>
                 </div>
                 <div class="stat-row">
                     <span>Daily P&L</span>
-                    <span class="stat-value">$0.00</span>
+                    <span class="stat-value positive">$0.00</span>
                 </div>
                 <div class="stat-row">
-                    <span>Win Rate</span>
-                    <span class="stat-value">—</span>
-                </div>
-                <div class="stat-row">
-                    <span>Markets Scanned Today</span>
-                    <span class="stat-value">1,300+</span>
-                </div>
-                <div class="stat-row">
-                    <span>Trades Executed</span>
+                    <span>Trades Today</span>
                     <span class="stat-value">0</span>
                 </div>
-                <div class="stat-row">
-                    <span>Status</span>
-                    <span style="color: #00d26a;">● Scanning</span>
-                </div>
-            </div>
-
-            <!-- Shadow Whale Targets -->
-            <div class="card">
-                <h2>🐋 Tier A Whale Targets</h2>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="wallet-address">0xd218...eb5c9</div>
-                        <div>$900K/week • 65% win • 95% efficiency</div>
-                        <div class="activity-time">"friendlyping" • Copy Priority: HIGHEST</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="wallet-address">0xee61...debf</div>
-                        <div>$1.3M/week • 52% win • High volume</div>
-                        <div class="activity-time">Copy Priority: HIGHEST</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="wallet-address">0x5e2b...f439</div>
-                        <div>155% edge • Elite sniper • 8 markets</div>
-                        <div class="activity-time">Copy Priority: HIGHEST</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="wallet-address">0x7780...03ed</div>
-                        <div>137% edge • Precision timing</div>
-                        <div class="activity-time">Copy Priority: HIGHEST</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="card">
-                <h2>📅 Recent Activity</h2>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <strong>Top 50 Whales Report</strong> completed
-                        <div class="activity-time">12:30 PM - Tank delivered full intelligence</div>
-                    </div>
-                    <div class="activity-item">
-                        <strong>Shadow Whale research</strong> finalized
-                        <div class="activity-time">11:24 AM - 50 profitable wallets identified</div>
-                    </div>
-                    <div class="activity-item">
-                        <strong>Tank agent</strong> initialized
-                        <div class="activity-time">12:29 PM - Research specialist online</div>
-                    </div>
-                    <div class="activity-item">
-                        <strong>Polymarket Bot</strong> deployed LIVE
-                        <div class="activity-time">Feb 15, 9:44 PM - Autonomous trading active</div>
-                    </div>
-                    <div class="activity-item">
-                        <strong>Resend Email</strong> configured
-                        <div class="activity-time">12:24 PM - API operational</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cron Jobs -->
-            <div class="card">
-                <h2>⏰ Automated Jobs</h2>
-                <div class="stat-row">
-                    <span>Polymarket Bot Scan</span>
-                    <span style="color: #00d26a;">● Hourly</span>
-                </div>
-                <div class="stat-row">
-                    <span>Next Scan</span>
-                    <span>2:00 PM</span>
+                    <div class="stat-row">
+                    <span>Markets Scanned</span>
+                    <span class="stat-value">1,600</span>
                 </div>
                 <div class="stat-row">
                     <span>Last Scan</span>
-                    <span>1:00 PM</span>
+                    <span style="color: #00d26a;">Active</span>
+                </div>
+            </div>
+
+            <!-- Tier A Targets -->
+            <div class="card">
+                <h2>🎯 Tier A Whale Targets</h2>
+                <div style="background: #0f0f1a; padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; border-left: 3px solid #e94560;">
+                    <div style="font-family: monospace; font-size: 0.9rem;">0xd218...b5c9</div>
+                    <div style="font-size: 0.85rem; color: #888; margin-top: 0.25rem;">
+                        friendlyping • $900K/week • 65% win
+                    </div>
+                </div>
+                <div style="background: #0f0f1a; padding: 1rem; border-radius: 8px; border-left: 3px solid #e94560;">
+                    <div style="font-family: monospace; font-size: 0.9rem;">0xee61...debf</div>
+                    <div style="font-size: 0.85rem; color: #888; margin-top: 0.25rem;">
+                        Whale_2 • $1.3M/week • 52% win
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Operations -->
+            <div class="card">
+                <h2>⚡ Active Operations</h2>
+                <div class="stat-row">
+                    <span>Shadow Monitor</span>
+                    <span style="color: #00d26a;">● Running</span>
+                </div>
+                <div class="stat-row">
+                    <span>Clear-Win Bot</span>
+                    <span style="color: #00d26a;">● Scanning</span>
+                </div>
+                <div class="stat-row">
+                    <span>15-Min Bot</span>
+                    <span style="color: #74b9ff;">🟡 Building</span>
+                </div>
+                <div class="stat-row">
+                    <span>Auto-Copy</span>
+                    <span style="color: #00d26a;">● Enabled</span>
+                </div>
+            </div>
+
+            <!-- Mission Status -->
+            <div class="card">
+                <h2>🎯 Mission Status</h2>
+                <div style="text-align: center; padding: 1rem 0;">
+                    <div style="font-size: 3rem; color: #e94560; font-weight: bold;">3</div>
+                    <div style="color: #888; margin-top: 0.5rem;">Active Systems</div>
+                </div>
+                <div class="stat-row" style="margin-top: 1rem;">
+                    <span>Goal</span>
+                    <span class="stat-value">Profitability</span>
                 </div>
                 <div class="stat-row">
                     <span>Status</span>
-                    <span class="stat-value">Operational</span>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="card">
-                <h2>⚡ Quick Actions</h2>
-                <p style="margin-bottom: 1rem;">Manual operations and monitoring</p>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <a href="#" class="btn" onclick="alert('Connect to Polymarket')">🔗 Connect Polymarket</a>
-                    <a href="#" class="btn" onclick="alert('Deploy Shadow Monitor')">🐋 Deploy Shadow Monitor</a>
-                    <a href="#" class="btn" onclick="alert('View Full Reports')">📄 View Reports</a>
-                    <a href="#" class="btn" onclick="alert('Tank Research')">🖥️ Delegate to Tank</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Overview -->
-        <div class="card" style="margin-top: 1.5rem;">
-            <h2>📈 Mission Overview</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 1rem;">
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">$100</div>
-                    <div style="color: #888;">Initial Capital</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">50</div>
-                    <div style="color: #888;">Wallets Researched</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">8</div>
-                    <div style="color: #888;">Tier A Targets</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">7.6%</div>
-                    <div style="color: #888;">Profitable Wallets</div>
+                    <span style="color: #00d26a;">🟢 Operational</span>
                 </div>
             </div>
         </div>
@@ -340,26 +303,16 @@
 
     <div class="footer">
         <p>Morpheus AI • Built to exit the Matrix</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Last updated: February 16, 2026</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Auto-refreshes every 15 minutes</p>
     </div>
 
     <script>
-        // Auto-refresh every 60 seconds
+        // Auto-refresh every 15 minutes (900 seconds)
         setInterval(() => {
             location.reload();
-        }, 60000);
-
-        // Update timestamps dynamically
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            });
-            // Could update specific elements here
-        }
-        setInterval(updateTime, 1000);
+        }, 900000);
+        
+        console.log('Dashboard loaded. Next refresh in 15 minutes.');
     </script>
 </body>
 </html>
