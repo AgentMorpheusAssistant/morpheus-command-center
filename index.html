@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpheus Command Center</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-bottom: 2px solid #e94560;
+        }
+        .header h1 {
+            color: #e94560;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .header p { color: #888; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #2a2a3e;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #e94560;
+        }
+        .card h2 {
+            color: #e94560;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-online { background: #00d26a; box-shadow: 0 0 10px #00d26a; }
+        .status-offline { background: #ff4757; }
+        .status-warn { background: #ffa502; }
+        .agent-list {
+            list-style: none;
+        }
+        .agent-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #2a2a3e;
+        }
+        .agent-item:last-child { border-bottom: none; }
+        .agent-name {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+        .agent-role {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #2a2a3e;
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-value {
+            font-weight: bold;
+            color: #e94560;
+        }
+        .activity-list {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .activity-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #0f0f1a;
+            border-radius: 8px;
+            border-left: 3px solid #e94560;
+        }
+        .activity-time {
+            font-size: 0.75rem;
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { background: #ff6b6b; }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            border-top: 1px solid #2a2a3e;
+            margin-top: 2rem;
+        }
+        .wallet-address {
+            font-family: monospace;
+            background: #0f0f1a;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .tier-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .tier-a { background: #00d26a; color: #000; }
+        .tier-b { background: #ffa502; color: #000; }
+        .tier-c { background: #74b9ff; color: #000; }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💊 Morpheus Command Center</h1>
+        <p>Polymarket Trading • Shadow Whale Intelligence • Team Operations</p>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Agent Status -->
+            <div class="card">
+                <h2>🤖 Agent Status</h2>
+                <ul class="agent-list">
+                    <li class="agent-item">
+                        <div class="agent-name">
+                            <span class="status-indicator status-online"></span>
+                            <div>
+                                <div>Morpheus</div>
+                                <div class="agent-role">Main Agent / Coordinator</div>
+                            </div>
+                        </div>
+                        <span class="tier-badge tier-a">ACTIVE</span>
+                    </li>
+                    <li class="agent-item">
+                        <div class="agent-name">
+                            <span class="status-indicator status-online"></span>
+                            <div>
+                                <div>Tank</div>
+                                <div class="agent-role">Research Specialist</div>
+                            </div>
+                        </div>
+                        <span class="tier-badge tier-a">ACTIVE</span>
+                    </li>
+                    <li class="agent-item">
+                        <div class="agent-name">
+                            <span class="status-indicator status-online"></span>
+                            <div>
+                                <div>Polymarket Bot</div>
+                                <div class="agent-role">Clear-Win Strategy</div>
+                            </div>
+                        </div>
+                        <span class="tier-badge tier-a">LIVE</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Polymarket Status -->
+            <div class="card">
+                <h2>📊 Polymarket Bot</h2>
+                <div class="stat-row">
+                    <span>Capital Deployed</span>
+                    <span class="stat-value">$100.00</span>
+                </div>
+                <div class="stat-row">
+                    <span>Daily P&L</span>
+                    <span class="stat-value">$0.00</span>
+                </div>
+                <div class="stat-row">
+                    <span>Win Rate</span>
+                    <span class="stat-value">—</span>
+                </div>
+                <div class="stat-row">
+                    <span>Markets Scanned Today</span>
+                    <span class="stat-value">1,300+</span>
+                </div>
+                <div class="stat-row">
+                    <span>Trades Executed</span>
+                    <span class="stat-value">0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Status</span>
+                    <span style="color: #00d26a;">● Scanning</span>
+                </div>
+            </div>
+
+            <!-- Shadow Whale Targets -->
+            <div class="card">
+                <h2>🐋 Tier A Whale Targets</h2>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="wallet-address">0xd218...eb5c9</div>
+                        <div>$900K/week • 65% win • 95% efficiency</div>
+                        <div class="activity-time">"friendlyping" • Copy Priority: HIGHEST</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="wallet-address">0xee61...debf</div>
+                        <div>$1.3M/week • 52% win • High volume</div>
+                        <div class="activity-time">Copy Priority: HIGHEST</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="wallet-address">0x5e2b...f439</div>
+                        <div>155% edge • Elite sniper • 8 markets</div>
+                        <div class="activity-time">Copy Priority: HIGHEST</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="wallet-address">0x7780...03ed</div>
+                        <div>137% edge • Precision timing</div>
+                        <div class="activity-time">Copy Priority: HIGHEST</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <h2>📅 Recent Activity</h2>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <strong>Top 50 Whales Report</strong> completed
+                        <div class="activity-time">12:30 PM - Tank delivered full intelligence</div>
+                    </div>
+                    <div class="activity-item">
+                        <strong>Shadow Whale research</strong> finalized
+                        <div class="activity-time">11:24 AM - 50 profitable wallets identified</div>
+                    </div>
+                    <div class="activity-item">
+                        <strong>Tank agent</strong> initialized
+                        <div class="activity-time">12:29 PM - Research specialist online</div>
+                    </div>
+                    <div class="activity-item">
+                        <strong>Polymarket Bot</strong> deployed LIVE
+                        <div class="activity-time">Feb 15, 9:44 PM - Autonomous trading active</div>
+                    </div>
+                    <div class="activity-item">
+                        <strong>Resend Email</strong> configured
+                        <div class="activity-time">12:24 PM - API operational</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cron Jobs -->
+            <div class="card">
+                <h2>⏰ Automated Jobs</h2>
+                <div class="stat-row">
+                    <span>Polymarket Bot Scan</span>
+                    <span style="color: #00d26a;">● Hourly</span>
+                </div>
+                <div class="stat-row">
+                    <span>Next Scan</span>
+                    <span>2:00 PM</span>
+                </div>
+                <div class="stat-row">
+                    <span>Last Scan</span>
+                    <span>1:00 PM</span>
+                </div>
+                <div class="stat-row">
+                    <span>Status</span>
+                    <span class="stat-value">Operational</span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h2>⚡ Quick Actions</h2>
+                <p style="margin-bottom: 1rem;">Manual operations and monitoring</p>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <a href="#" class="btn" onclick="alert('Connect to Polymarket')">🔗 Connect Polymarket</a>
+                    <a href="#" class="btn" onclick="alert('Deploy Shadow Monitor')">🐋 Deploy Shadow Monitor</a>
+                    <a href="#" class="btn" onclick="alert('View Full Reports')">📄 View Reports</a>
+                    <a href="#" class="btn" onclick="alert('Tank Research')">🖥️ Delegate to Tank</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="card" style="margin-top: 1.5rem;">
+            <h2>📈 Mission Overview</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 1rem;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">$100</div>
+                    <div style="color: #888;">Initial Capital</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">50</div>
+                    <div style="color: #888;">Wallets Researched</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">8</div>
+                    <div style="color: #888;">Tier A Targets</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #e94560; font-weight: bold;">7.6%</div>
+                    <div style="color: #888;">Profitable Wallets</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Morpheus AI • Built to exit the Matrix</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Last updated: February 16, 2026</p>
+    </div>
+
+    <script>
+        // Auto-refresh every 60 seconds
+        setInterval(() => {
+            location.reload();
+        }, 60000);
+
+        // Update timestamps dynamically
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            // Could update specific elements here
+        }
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
